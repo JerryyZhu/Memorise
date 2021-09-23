@@ -7,12 +7,18 @@
 
 import SwiftUI
 struct ContentView: View {
-    var emojis = ["🚗","🚌","🚑","🚜","🛴","🚲","🚔","🛺","🚘","🚃","🚄","🚠","🚅","✈️","🚀","🛸","🚁","🛶","🚤","🚢","🛳","🚓","🚛","🛵"]
+    @State var emojis = [ "🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐻‍❄️", "🐨", "🐯", "🦁", "🐮", "🐷", "🐸", "🐵"]
     @State var emojiCount: Int = 4
+    
+    var vehicleEmojis = ["🚗","🚌","🚑","🚜","🛴","🚲","🚔","🛺","🚘","🚃","🚄","🚠","🚅","✈️","🚀","🛸","🚁","🛶","🚤","🚢","🛳","🚓","🚛","🛵"]
+    var animalEmojis = [ "🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐻‍❄️", "🐨", "🐯", "🦁", "🐮", "🐷", "🐸", "🐵"]
+    var foodEmojis = [ "🌭", "🍔", "🍟", "🍕", "🫓", "🥪", "🥙", "🧆", "🌮", "🌯", "🫔", "🥗", "🥘", "🫕", "🥫", "🍝", "🍜", "🍲", "🍛", "🍣", "🍱", "🥟", "🦪", "🍤", "🍙", "🍚", "🍘", "🍥", "🥠", "🥮", "🍢", "🍡", "🍧", "🍨", "🍦", "🥧", "🧁", "🍰", "🎂", "🍮", "🍭", "🍬", "🍫", "🍿", "🍩", "🍪", "🌰"]
+    
     var body: some View {
         VStack {
+            title
             ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))]){
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 60))]){
                     ForEach(emojis[0..<emojiCount], id: \.self) { emoji in
                         CardView(content: emoji)
                             .aspectRatio(2/3, contentMode: .fit)
@@ -22,9 +28,11 @@ struct ContentView: View {
             .foregroundColor(.red)
             Spacer()
             HStack {
-                add
+                animalTheme
                 Spacer()
-                remove
+                vehicleTheme
+                Spacer()
+                foodTheme
             }
             .font(.largeTitle)
             .padding(.horizontal)
@@ -51,6 +59,56 @@ struct ContentView: View {
             Image(systemName: "plus.circle")
         }
     }
+    
+    var title: some View{
+        Text("Memorise!").font(Font.system(size:30))
+    }
+    
+    var animalTheme: some View {
+        Button (
+            action: {
+                emojis = animalEmojis.shuffled()
+                emojiCount = Int.random(in: 4..<animalEmojis.count)
+            },
+            label: {
+                VStack{
+                    Image(systemName: "tortoise").font(.largeTitle)
+                    Text("Animals").font(.body)
+                }
+            }
+        )
+    }
+    
+    var vehicleTheme: some View {
+        Button (
+            action: {
+                emojis = vehicleEmojis.shuffled()
+                emojiCount = Int.random(in: 4..<vehicleEmojis.count)
+            },
+            label: {
+                VStack{
+                    Image(systemName: "car").font(.largeTitle)
+                    Text("Vehicles").font(.body)
+                }
+            }
+        )
+    }
+    
+    var foodTheme: some View {
+        Button (
+            action: {
+                emojis = foodEmojis.shuffled()
+                emojiCount = Int.random(in: 4..<foodEmojis.count)
+            },
+            label: {
+                VStack{
+                    Image(systemName: "applelogo").font(.largeTitle)
+                    Text("Food").font(.body)
+                }
+            }
+        )
+    }
+    
 }
 struct CardView: View {
     var content: String
