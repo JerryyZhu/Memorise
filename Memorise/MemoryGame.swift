@@ -6,10 +6,21 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct MemoryGame<CardContent> where CardContent: Equatable {
     private(set) var cards: Array<Card>
-    private var indexOfTheOneAndOnlyFaceUpCard: Int?
+    private var indexOfTheOneAndOnlyFaceUpCard: Int? {
+        get {
+            let faceUpCardIndices = cards.indices.filter({ cards[$0].isFaceUp })
+            return faceUpCardIndices.oneAndOnly
+            // Alternatively {cards.indices.filter({ cards[$0].isFaceUp }).oneAndOnly } for one liner
+        }
+        set {
+            // cards.indices.forEach({ cards[$0].isFaceUp = ($0 == newValue)})
+            cards.indices.forEach({ index in cards[index].isFaceUp = (index == newValue)})
+        }
+    }
     
     mutating func choose(_ card: Card){
         print("\(cards)")
@@ -23,14 +34,11 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
                     cards[chosenIndex].isMatched = true
                     cards[potentialMatchIndex].isMatched = true
                 }
-                indexOfTheOneAndOnlyFaceUpCard = nil
+                cards[chosenIndex].isFaceUp = true
             } else {
-                for index in cards.indices{
-                    cards[index].isFaceUp = false
-                }
                 indexOfTheOneAndOnlyFaceUpCard = chosenIndex
             }
-            cards[chosenIndex].isFaceUp.toggle()
+           
         }
         // A copy is made with structs, even with assignments
 //        var chosenCard = cards[chosenIndex]
@@ -59,7 +67,17 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     struct Card: Identifiable {
         var isFaceUp: Bool = false
         var isMatched: Bool = false
-        var content: CardContent
-        var id: Int
+        let content: CardContent
+        let id: Int
+    }
+}
+
+extension Array {
+    var oneAndOnly: Element?{
+        if self.count == 1{
+            return self.first
+        } else{
+            return nil
+        }
     }
 }
