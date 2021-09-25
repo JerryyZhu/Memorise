@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct MemoriseApp: App {
+    // Class, this is a reference type / pointer -> they are mutable
+    let game = EmojiMemoryGame()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(viewModel: game)
         }
     }
 }
